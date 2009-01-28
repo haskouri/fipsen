@@ -1,5 +1,5 @@
 //package com.fipsen.scavenger.services;
-package com.fipsen.scavenger.services;
+package com.fipsen.scavenger.services.download;
 
 public interface HtmlDownloader 
 {
