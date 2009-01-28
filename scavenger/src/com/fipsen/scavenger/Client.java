@@ -3,7 +3,7 @@ package com.fipsen.scavenger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.fipsen.scavenger.services.HtmlDownloader;
+import com.fipsen.scavenger.services.download.HtmlDownloader;
 
 public class Client 
 {
@@ -20,7 +20,8 @@ public class Client
 		{
 			htmlDownloader.download();
 		}
-		catch (Exception e) {
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}
