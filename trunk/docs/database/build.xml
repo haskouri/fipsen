@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+
+
+<project name="Fibsen.DB" default="all">
+
+	<!--	==================== Properties ====================================== -->
+
+	<property name="JDBC.driver" 	value="com.mysql.jdbc.Driver" />
+	<property name="JDBC.url" 		value="jdbc:mysql://localhost:3306/" />
+	<property name="DB.root" 		value="root" />
+	<property name="DB.user" 		value="root" />
+	<property name="root.pwd" 		value="" />
+	<property name="user.pwd" 		value="" />
+	<property name="db.driver.jar" 	value="../../lib/lib/mysql-connector-java-5.0.5-bin.jar" />
+
+
+	<!--	==================== All Target ====================================== -->
+	<target name="all" depends="createDB, createTables" description="Create user, tables and insert basic data" />
+
+	<!-- Executes different SQL scripts -->
+
+
+	<target name="createDB" description="Creates Database">
+		<sql driver="${JDBC.driver}" url="${JDBC.url}" userid="${DB.root}" password="${root.pwd}">
+			<classpath>
+				<pathelement path="${db.driver.jar}" />
+			</classpath>
+			<transaction src="00_dbcreate.sql" />
+		</sql>
+	</target>	
+
+	<target name="createTables" description="Create Tables">
+		<sql driver="${JDBC.driver}" url="${JDBC.url}" userid="${DB.user}" password="${user.pwd}">
+			<classpath>
+				<pathelement path="${db.driver.jar}" />
+			</classpath>
+			<transaction src="01_dbselect.sql"/>
+			<transaction src="02_tbl_user.sql"/>
+			<transaction src="03_tbl_group.sql" />
+			<transaction src="04_tbl_usergroup.sql" />
+			<transaction src="05_tbl_celebrity.sql" />
+			<transaction src="06_tbl_award.sql" />
+			<transaction src="07_tbl_image.sql" />
+			<transaction src="08_tbl_news.sql" />
+			<transaction src="09_tbl_jsplatestnews.sql" />
+			<transaction src="10_tbl_video.sql" />
+			<transaction src="11_tbl_rating.sql" />
+			<transaction src="12_tbl_type.sql" />
+			<transaction src="13_tbl_celebritytype.sql" />
+			<transaction src="14_tbl_celebrityaward.sql" />
+			<transaction src="15_tbl_latest_video.sql" />
+		</sql>
+	</target>
+
+	<target name="dropTable" description="Drop Tables">
+		<!-- TODO -->
+	</target>
+
+	<target name="insertData" description="Insert Data">
+		<!-- TODO -->
+	</target>
+	
+</project>
