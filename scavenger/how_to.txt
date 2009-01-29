@@ -1,0 +1,3 @@
+in Eclipse's "Run Configurations",put "-Djava.library.path=./dll" as vm arguments.
+
+this will tell the system to load dll's from the specified directory.  
