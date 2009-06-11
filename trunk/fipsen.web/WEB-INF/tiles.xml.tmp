@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+-->
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+	<definition name=".loginLayout" template="/pages/tiles/loginLayout.jsp">    
+	    <put-attribute name="header" 	value="/pages/jsp/header.jsp"/>
+	    <put-attribute name="body" 		value=""/>
+	    <put-attribute name="footer" 	value="/pages/jsp/footer.jsp"/>  	
+  	</definition>
+  	
+  	<definition name=".classicLayout" template="/pages/tiles/classicLayout.jsp">    
+	    <put-attribute name="header" 	value="/pages/jsp/header1.jsp"/>
+	    <put-attribute name="menu" 		value=""/>
+	    <put-attribute name="body" 		value=""/>
+	    <put-attribute name="footer" 	value="/pages/jsp/footer.jsp"/>  	
+  	</definition>
+  	
+  	
+  	
+  	
+  	<definition name="login_input" extends=".loginLayout">
+  		<put-attribute name="body" value="/pages/jsp/login.jsp"/>
+  	</definition>  	
+  	
+  	<definition name="home_page" extends=".classicLayout">
+  	<!--<put-attribute name="body" value="/pages/jsp/home.jsp"/>  -->
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/AdminHome.jsp"/>
+  	</definition>
+  	
+  	<definition name="incident" extends=".classicLayout"> 	
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/AdminHome.jsp"/>
+  	</definition>
+  	
+  	<definition name="department" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Department.jsp"/>
+  	</definition>
+
+  	<definition name="region" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Region.jsp"/>
+  	</definition>  	
+  	
+  	<definition name="subcenter" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Subcenter.jsp"/>
+  	</definition>
+  	
+  	<definition name="person" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Person.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="role" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Role.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="user" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/User.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="problemtype" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/ProblemType.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="patrolunit" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/PatrolUnit.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="point" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Point.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="hop" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/Hop.jsp"/>
+  	</definition>
+  	
+  	
+  	<definition name="patrolteam" extends=".classicLayout">
+  		<put-attribute name="menu" value="/pages/jsp/Menu.jsp"/>
+  		<put-attribute name="body" value="/pages/jsp/PatrolTeam.jsp"/>
+  	</definition>
+  	
+</tiles-definitions>
