@@ -3,12 +3,172 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 	
-	<bean name="downloader" class="com.fipsen.scavenger.services.download.impl.CurlHtmlDownloader">
+	<bean name="newsCollectionThread" class="com.fipsen.scavenger.NewsCollectionThread">
+		<property name="duration" value="120000"/>
+		<property name="newsDAO" ref="newsDAO"/>
+		<property name="imageDAO" ref="imageDAO"/>
+		<property name="latestNewsDAO" ref="latestNewsDAO"/>
+		<property name="htmlDownloader" ref="downloader"/>
+		<property name="imageDownloader" ref="imageDownloader"/>
+		<property name="newsDownloader" ref="newsDownloader"/>
+		<property name="newsCollection" ref="newsCollection"/>
+		<property name="imageUploader" ref="localHostImageUploader"/>
+		<property name="saveIfNew" value="true"/>
+	</bean>
+	
+	<bean name="topCelebrityDownloaderThread" class="com.fipsen.scavenger.TopCelebrityCollectionThread">
+		<property name="topCelebrityDownloader" ref="topCelebrityDownloader"></property>
+		<property name="topCelebrityDAO" ref="topCelebrityDAO"/>
+		<property name="feedHour" value="6"/>
+		<property name="feedMinute" value="15"/>
+	</bean>
+	
+	<bean name="localHostImageUploader" class="com.fipsen.scavenger.services.upload.LocalhostUploader" scope="prototype">
+		<!--<property name="rootDirectory" value="E:\IntrigueIT\Projects\Fipsen\fipsen.web"/>
+		-->
+		<property name="rootDirectory" value="E:\Technology\Tools\www.apache.org\tomcat\apache-tomcat-6.0.18__fipsen\apache-tomcat-6.0.18\webapps\Fipsen"/>
+		<property name="subDirectory"  value="imgf"/>		
+	</bean>
+	
+	<bean name="downloader" class="com.fipsen.scavenger.services.download.impl.CurlHtmlDownloader" scope="prototype">
 		<property name="url" value="http://www.celebuzz.com/"/>
 		<property name="writer" ref="curlFileWriter"/>
-		<property name="fileExtension" ref=".html"/>
+		<property name="fileExtension" value=".html"/>
 		<property name="downloadDirectory" value="E:\IntrigueIT\Projects\downloads\"/>		
 	</bean>
 	
-	<bean name="curlFileWriter" class="com.fipsen.scavenger.standalonutilities.CurlHtmlFileWriter"></bean>
+	<bean name="topCelebrityDownloader" class="com.fipsen.scavenger.services.download.impl.CurlHtmlDownloader" scope="prototype">
+		<property name="url" value="http://www.hollywood.com/celebrities/top_celebs_100"/>
+		<property name="writer" ref="curlFileWriter"/>
+		<property name="fileExtension" value=".html"/>
+		<property name="downloadDirectory" value="E:\IntrigueIT\Projects\downloads\"/>		
+	</bean>
+	
+	<bean name="newsDownloader" class="com.fipsen.scavenger.services.download.impl.CurlHtmlDownloader" scope="prototype">
+		<property name="writer" ref="curlFileWriter"/>
+		<property name="fileExtension" value=".html"/>
+		<property name="downloadDirectory" value="E:\IntrigueIT\Projects\downloads\news\"/>		
+	</bean>
+	
+	<bean name="imageDownloader" class="com.fipsen.scavenger.services.download.impl.CurlImageDownloader" scope="prototype">
+		<property name="writer" ref="curlFileWriter"/>
+		<property name="fileExtension" value=".png"/>
+		<property name="downloadDirectory" value="E:\IntrigueIT\Projects\downloads\images\"/>		
+	</bean>
+	
+	<bean name="curlFileWriter" class="com.fipsen.scavenger.standalonutilities.CurlHtmlFileWriter" scope="prototype"/>
+	<bean name="curlImageFileWriter" class="com.fipsen.scavenger.standalonutilities.CurlHtmlFileWriter" scope="prototype"/>
+	<bean name="curlImageWriter" class="com.fipsen.scavenger.standalonutilities.CurlImageFileWriter" scope="prototype"/>
+	
+	<!-- <bean name="simpleHeadingNewsDataCollection" class="com.fipsen.scavenger.datacollection.SimpleHeadingNewsDataCollection">
+		<property name="processor" ref="headeingNewsProcessor"/>
+	</bean>
+	
+	<bean name="headeingNewsProcessor" class="com.fipsen.scavenger.processor.NewsHeadingTextProcessor">
+		<property name="parseExperssion" value="div,span,h2,a"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+	</bean>
+	 -->
+	<bean name="newsCollection" class="com.fipsen.scavenger.datacollection.NewsCollection" scope="prototype">
+		<property name="imageCollection" ref="imageCollection"/>		
+		<property name="newsHeadingProcessor" ref="headeingNewsProcessor"/>
+		<property name="headingUrlProcessor" ref="headingUrlProcessor"/>
+		<property name="bodyProcessor" ref="newsBodyProcessor"/>
+		<!-- property name="newsDateProcessor" ref="newsDateProcessor"/> -->
+		
+		
+	</bean>
+	
+	<bean name="imageCollection" class="com.fipsen.scavenger.datacollection.ImageCollection" scope="prototype">
+		<property name="urlProcessor" ref="imageUrlProcessor"/>
+		<property name="altProcessor" ref="imageAltProcessor"/>
+		<property name="titleProcessor" ref="imageTitleProcessor"/>		
+	</bean>
+	
+	<bean name="topCelebrityCollection" class="com.fipsen.scavenger.datacollection.TopCelebrityCollection" scope="prototype">
+		<property name="nameProcessor" ref="topCelebrityProcessor"/>
+	</bean>
+	
+	<bean name="headeingNewsProcessor" class="com.fipsen.scavenger.processor.PlainTextStringProcessor" scope="prototype">
+		<property name="parseExperssion" value="div,span,h2,a"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+	</bean>
+	
+	<bean name="headingUrlProcessor" class="com.fipsen.scavenger.processor.HtmlProcessor" scope="prototype">
+		<property name="parseExperssion" value="div,span,h2,a"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+		<property name="postFilter" ref="aFilter"/>		
+	</bean>
+	
+	<bean name="newsBodyProcessor" class="com.fipsen.scavenger.processor.MultipleTextStringProcessor" scope="prototype">
+		<!--<property name="parseExperssion" value="div,div,div,div,div,p"/>
+		--><property name="parseExperssion" value="div,div,div,div,div,div,p"/>
+		
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+		
+	</bean>
+	
+	<bean name="newsDateProcessor" class="com.fipsen.scavenger.processor.PlainTextStringProcessor" scope="prototype">
+		<property name="parseExperssion" value="div,div,div,div,div,span,div"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>		
+	</bean>
+	
+	<bean name="topCelebrityProcessor" class="com.fipsen.scavenger.processor.MultipleHtmlProcessor" scope="prototype">
+		<property name="parseExperssion" value="div,div,table,tr,td,table,tr,td,a"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>		
+		
+	</bean>
+	
+	
+	<bean name="imageAltProcessor" class="com.fipsen.scavenger.processor.HtmlProcessor" scope="prototype">
+		<!-- <property name="parseExperssion" value="div,span,div,a,img"/> -->
+		
+		<property name="parseExperssion" value="div,div,div,div,div,div,span,div,table,tr,td,a,img"/>
+		
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+		<property name="postFilter" ref="altFilter"/>		
+	</bean>
+	
+	<bean name="imageUrlProcessor" class="com.fipsen.scavenger.processor.HtmlProcessor" scope="prototype">
+		<!-- <property name="parseExperssion" value="div,span,div,a,img"/> -->
+		<property name="parseExperssion" value="div,div,div,div,div,div,span,div,table,tr,td,a,img"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>
+		<property name="postFilter" ref="srcFilter"/>
+		
+	</bean>
+	
+	<bean name="imageTitleProcessor" class="com.fipsen.scavenger.processor.HtmlProcessor" scope="prototype">
+		<property name="parseExperssion" value="div,div,div,div,div,div,span,div,table,tr,td,a,img"/>
+		<property name="nodeListFilter" ref="nodeListFilter"/>	
+		<property name="postFilter" ref="titleFilter"/>
+		
+	</bean>
+	
+	<bean name="newsDAO" class="com.fipsen.core.dao.hibernate.NewsDAOHibernate" scope="prototype"/>
+	<bean name="latestNewsDAO" class="com.fipsen.core.dao.hibernate.LatestNewsDAOHibernate" scope="prototype"/>
+	<bean name="imageDAO" class="com.fipsen.core.dao.hibernate.ImageDAOHibernate" scope="prototype"/>
+	<bean name="topCelebrityDAO" class="com.fipsen.core.dao.hibernate.TopCelebrityDAOHibernate"/>
+	
+	<bean name="titleFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.PostFilter" scope="prototype">
+		<property name="attribute" value="title"/>
+	</bean>
+	
+	<bean name="altFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.PostFilter" scope="prototype">
+		<property name="attribute" value="alt"/>
+	</bean>
+	
+	<bean name="aFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.PostFilter" scope="prototype">
+		<property name="attribute" value="href"/>
+	</bean>
+	
+	<bean name="srcFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.PostFilter" scope="prototype">
+		<property name="attribute" value="src"/>
+	</bean>
+	
+	<bean name="urlFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.PostFilter" scope="prototype">
+		<property name="attribute" value="alt"/>
+	</bean>
+	
+	
+	<bean name="nodeListFilter" class="com.fipsen.scavenger.standalonutilities.htmlfilter.impl.SimpleNodeListFilterImpl" scope="prototype"/>
 </beans>
