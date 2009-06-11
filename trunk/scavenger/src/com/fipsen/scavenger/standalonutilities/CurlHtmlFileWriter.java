@@ -17,7 +17,8 @@ public class CurlHtmlFileWriter extends Writer implements CurlWrite
 		{
 			//System.out.print((char)b);
 			s = s + (char)b;
-			//s = s + (char)b;			
+			//s = s + (char)b;	
+			
 		}
 	
 				

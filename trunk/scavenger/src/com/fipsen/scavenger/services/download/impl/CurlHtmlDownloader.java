@@ -6,62 +6,25 @@ import org.curl.CurlGlue;
 import org.curl.CurlWrite;
 
 import com.fipsen.core.util.IDGenerator;
-import com.fipsen.core.util.Writer;
 import com.fipsen.scavenger.services.download.HtmlDownloader;
 
 
-public class CurlHtmlDownloader implements HtmlDownloader 
+public class CurlHtmlDownloader extends HtmlDownloader 
 {
 	protected Logger log = Logger.getLogger(this.getClass());
 	
-	private Writer writer;
-	private String url;
-	private String downloadDirectory;
-	private String fileExtension;
-
-	public Writer getWriter() {
-		return writer;
-	}
-
-	public void setWriter(Writer writer) {
-		this.writer = writer;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getDownloadDirectory() {
-		return downloadDirectory;
-	}
-
-	public void setDownloadDirectory(String downloadDirectory) {
-		this.downloadDirectory = downloadDirectory;
-	}
 	
 
-	public String getFileExtension() {
-		return fileExtension;
-	}
-
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
-
 	@Override
-	public void download() throws Exception {
+	public String download() throws Exception {
 
 		CurlGlue cg = new CurlGlue();
 
-		cg.setopt(CURL.OPT_URL, url);
+		cg.setopt(CURL.OPT_URL, super.getUrl() );
 		//Writer w = new CurlFileWriter();
 
-		if (writer != null) {
-			cg.setopt(CURL.OPT_WRITEFUNCTION, (CurlWrite) writer);
+		if (super.getWriter() != null) {
+			cg.setopt(CURL.OPT_WRITEFUNCTION, (CurlWrite) super.getWriter());
 			int i = cg.perform();
 			
 			if (i != 0)
@@ -70,16 +33,18 @@ public class CurlHtmlDownloader implements HtmlDownloader
 				throw new Exception("download error.");
 			}
 			
-			writer.setFileName(downloadDirectory + IDGenerator.generateOID("")
-							+ fileExtension);
-			writer.write(writer.getText());
+			super.getWriter().setFileName(super.getDownloadDirectory() + IDGenerator.generateOID("")
+							+ super.getFileExtension() );
+			super.getWriter().write( super.getWriter().getText());
 
-			log.info("file name is: " + writer.getFileName());
+			log.info("file name is: " + super.getWriter().getFileName());
+			return getWriter().getFileName();
 
 		}
 		else
 		{
 			cg.perform();
+			return null;
 		}
 		
 		

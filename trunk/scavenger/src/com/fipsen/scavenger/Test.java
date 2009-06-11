@@ -1,20 +1,21 @@
 package com.fipsen.scavenger;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.curl.CURL;
 import org.curl.CurlGlue;
 import org.curl.CurlWrite;
+
+import com.fipsen.core.dao.ImageDAO;
+import com.fipsen.core.dao.hibernate.ImageDAOHibernate;
+import com.fipsen.core.entity.Image;
+import com.fipsen.core.util.IDGenerator;
 
 public class Test implements CurlWrite {
 	
@@ -48,6 +49,37 @@ private List<Byte> myByte = new ArrayList<Byte>();
 	public static void main(String[] args) 
 	{
 		
+		//imageWriting();
+		dbTest();
+		
+	}
+	
+	private static void dbTest()
+	{
+		Image i = new Image();
+		String test = "test";
+		i.setAltertag(test);
+		i.setOid(IDGenerator.generateOID("test").substring(0,18));
+		i.setPath(test);
+		i.setReferenceid(test);
+		i.setTitle(test);
+		i.setType(1);
+		i.setUrl(test);
+		
+		ImageDAO d = new ImageDAOHibernate();
+		try
+		{
+			d.save(i);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void imageWriting()
+	{
 		CurlGlue cg = new CurlGlue();
 		cg.setopt(CURL.OPT_URL, "http://www.google.com.bd/images/nav_logo3.png");
 		
@@ -62,8 +94,6 @@ private List<Byte> myByte = new ArrayList<Byte>();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	@Override
