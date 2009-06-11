@@ -1,0 +1,221 @@
+<project name="WBMS" default="help" basedir=".">
+
+<!-- ===================== Property Definitions =========================== -->
+
+		<!--
+				All properties should be defined in this section.
+				Any host-specific properties should be defined in the build.properties file.
+		-->
+
+  <property file="${basedir}/build.properties" />
+
+	<property name="apps.name"		value="Fipsen" />
+
+	<property name="apps.home"		value="." />
+	<property name="conf.home"		value="${apps.home}/conf"/>
+	
+	<property name="src.home"		value="${apps.home}/WEB-INF/src/java"/>
+	<property name="classes.home"	value="${apps.home}/WEB-INF/classes"/>	
+	<property name="lib.home"		value="${apps.home}/WEB-INF/lib"/>
+
+	<property name="pages.home"		value="${apps.home}/pages"/>
+	<property name="img.home"		value="${apps.home}/img"/>
+	<property name="css.home"		value="${apps.home}/css"/>
+	<property name="adv.home"		value="${apps.home}/adv"/>
+	<property name="js.home"		value="${apps.home}/js"/>
+	
+	<property name="dist.home"		value="../webdist"/>
+	<property name="dist.webinf"	value="${dist.home}/WEB-INF"/>
+	<property name="dist.classes"	value="${dist.webinf}/classes"/>
+	<property name="dist.lib"		value="${dist.webinf}/lib"/>
+
+	<property name="dist.pages"		value="${dist.home}/pages"/>
+	<property name="dist.img"		value="${dist.home}/img"/>
+	<property name="dist.css"		value="${dist.home}/css"/>
+	<property name="dist.adv"		value="${dist.home}/adv"/>
+	<property name="dist.js"		value="${dist.home}/js"/>
+	<property name="dist.conf"		value="${dist.home}/conf"/>
+
+<!-- ==================== Compilation Classpath =========================== -->
+
+		<!--
+				This section creates the classpath for compilation.
+		-->
+
+	<path id="compile.classpath">
+
+		<!-- The object files for this application -->
+		<pathelement location="${classes.home}"/>
+
+		<!-- The lib files for this application -->
+		<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+		</fileset>
+
+    <!-- All files/jars that Tomcat makes available -->
+    <fileset dir="${tomcat.lib}">
+      <include name="*.jar"/>
+    </fileset>
+
+	</path>
+
+
+<!-- ==================== Build Targets below here========================= -->
+
+
+<!-- ==================== "help" Target =================================== -->
+
+		<!--
+				This is the default ant target executed if no target is specified.
+				This helps avoid users just typing 'ant' and running a
+				default target that may not do what they are anticipating...
+		-->
+
+ <target name="help" >
+	<echo message="Please specify a target! [usage: ant &lt;targetname&gt;]" />
+	<echo message="Here is a list of possible targets: "/>
+	<echo message="	clean.........Delete dist dir, all .class and war files"/>
+	<echo message="	make..........Creates directories if required" />
+	<echo message="	compile.......Compiles source files" />
+	<echo message="	build.........Build war file from .class and other files"/>
+	<echo message="	all...........Performs clean, make, compile, build" />
+ </target>
+
+<!-- ==================== "all" Target =================================== -->
+
+ <!--
+					This target should clean up any traces of the application,
+					create all necessary directories, compile all source files,
+					builds war file and copy the war file to ${webapps.home} directory 
+	-->
+	
+<target name="all" depends="clean, make, compile, build, war"/>
+ 
+ 
+<!-- ==================== "clean" Target ============================== -->
+
+	<!--
+					This target should clean up any traces of the application
+					so that if you run a new dist directly after cleaning, all
+					files will be replaced with what's current in source control
+	-->
+
+ <target name="clean" >
+		<delete dir="${dist.home}"/>
+ </target>
+
+<!-- ==================== "make" Target ================================ -->
+
+		<!--
+					This target is executed prior to any of the later targets
+					to make sure the directories exist. It only creates them
+					if they need to be created....
+					Other, similar, preparation steps can be placed here.
+		-->
+
+	<target name="make" depends="clean">
+
+		<mkdir dir="${dist.home}"/>
+		<mkdir dir="${dist.pages}"/>
+		<mkdir dir="${dist.img}"/>
+		<mkdir dir="${dist.css}"/>
+		<mkdir dir="${dist.webinf}" />
+		<mkdir dir="${dist.lib}" />
+		<mkdir dir="${dist.classes}" />
+		<mkdir dir="${dist.adv}"/>
+		<mkdir dir="${dist.js}"/>
+		<mkdir dir="${dist.conf}"/>
+	</target>
+
+<!-- ==================== "compile" Target ================================ -->
+
+		<!--
+					This only compiles java files that are newer
+					than their corresponding .class files.
+		-->
+
+	<target name="compile" depends="make" >
+		<javac srcdir="${src.home}" destdir="${dist.classes}" debug="yes" source="1.6" target="1.6">
+				<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+
+<!-- ==================== "build" Target ================================== -->
+
+		<!--
+					This target builds the war file for the application
+					by first building the directory structure of the
+					application in ${dist.home} and then creating the
+					war file using the ant <war> task
+		-->
+
+	<target name="build" depends="compile" >
+
+		
+		<!-- copy todir="${dist.home}" file="${apps.home}/index.html"/ -->
+
+		<!-- Copy web.xml and tiles.xml to WEB-INF -->
+		<copy todir="${dist.webinf}" file="${apps.home}/WEB-INF/web.xml"/>		
+		<copy todir="${dist.webinf}" file="${apps.home}/WEB-INF/tiles.xml"/>
+		<copy todir="${dist.webinf}" file="${apps.home}/WEB-INF/webApplicationContext.xml"/>
+		<copy todir="${dist.conf}"	file="${conf.home}/adv.prop"/>
+		
+		<!-- Copy confs -->
+		<copy		todir="${dist.classes}">
+			<fileset dir="${conf.home}"/>
+		</copy>
+		
+		<!-- Now, copy all the jar files we need -->
+		<copy		todir="${dist.lib}">
+			<fileset dir="${lib.home}" />
+		</copy>
+		
+		<!-- Now, copy img -->
+		<copy		todir="${dist.img}">
+			<fileset dir="${img.home}"/>
+		</copy>
+		
+		<!-- Now, copy pages -->
+		<copy		todir="${dist.pages}">
+			<fileset dir="${pages.home}"/>
+		</copy>
+		<!-- Now, copy css -->
+		
+		<copy		todir="${dist.css}">
+			<fileset dir="${css.home}"/>
+		</copy>
+		
+		<!-- Now, copy adv -->
+		<copy		todir="${dist.adv}">
+			<fileset dir="${adv.home}"/>
+		</copy>
+		
+		<!-- Now, copy js -->
+		<copy		todir="${dist.js}">
+			<fileset dir="${js.home}"/>
+		</copy>
+
+	</target>
+
+<!-- ==================== "war" Target ================================== -->
+
+		<!--
+					This target builds the war file for the application
+					by first building the directory structure of the
+					application in ${dist.home} and then creating the
+					war file using the ant <war> task
+		-->
+
+	<target name="war" depends="build" >
+		<!-- Create the <war> file -->
+		<jar jarfile="./${apps.name}.war" basedir="${dist.home}"/>
+	</target>
+	
+	<target name="copyLibs">
+		<copy todir="${lib.home}">
+					<fileset dir="../Fipsen.Lib/lib"/>
+		</copy>
+			
+		</target>
+
+</project>
