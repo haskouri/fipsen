@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.fipsen.core.entity.Image" table="t_image">
+		<id 
+			name="oid" column="oid">			
+		</id> 	
+ 	
+ 		<property name="type" 	column="type" 		not-null="false"	lazy="false"/>
+		<property name="path" 	column="path" 		not-null="false"	lazy="false"/>
+		<property name="url" 		column="url"			not-null="false"	lazy="false"/>
+		<property name="altertag" 		column="altertag"			not-null="false"	lazy="false"/>
+		<property name="title"	column="title"		not-null="false"	lazy="false"/>
+		<property name="referenceid"	column="referenceid"		not-null="false"	lazy="false"/>
+	</class>
+</hibernate-mapping>
