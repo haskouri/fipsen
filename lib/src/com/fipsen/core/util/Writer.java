@@ -1,8 +1,11 @@
 package com.fipsen.core.util;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.List;
 
 
 public class Writer 
@@ -20,7 +23,21 @@ public class Writer
 	}
 	
 	private String text;
+	private byte[] byteArray;
 	
+	public byte[] getByteArray() 
+	{
+		//ByteBuffer bb = ByteBuffer.allocate(byteArray.size());
+		//byte[] b = new byte[byteArray.size()];
+		
+		return  byteArray;
+	}
+	
+	public void setByteArray(byte[] b) 
+	{
+		
+		this.byteArray = b;
+	}
 	
 	public String getText() {
 		return text;
@@ -43,6 +60,20 @@ public class Writer
 		}
 		
 	}
+	
+	public void write(byte[] byteArray)  throws IOException
+	{
+		if (this.getFileName().equals(null))
+		{
+			System.out.println("no file declared to write. writing to console.");
+			System.out.println(text);
+		}
+		else
+		{
+			write(this.getFileName(), byteArray);
+		}
+		
+	}
 	/**
 	 * This method writes the raw text to supplied file.
 	 * @param fileName to write.
@@ -59,6 +90,24 @@ public class Writer
 			e.printStackTrace();
 		}
 		finally {
+			this.text = null;
+			output.close();
+		}	
+	}
+	public void write(String fileName,byte[] bytes) throws IOException 
+	{
+		java.io.OutputStream output = new FileOutputStream(fileName);
+		try {			
+			output.write(bytes);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			//this.setByteArray(null);// = null;
+			byte[] nullBytes = null;
+			this.setByteArray(nullBytes);
+			this.text = null;
 			output.close();
 		}	
 	}

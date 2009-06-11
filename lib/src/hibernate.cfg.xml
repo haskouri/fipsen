@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+					"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+					"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- DB400   
+		
+		<property name="connection.username">solext</property>
+		<property name="connection.password">solext1</property>
+		<property name="connection.url">jdbc:as400://11.44.16.15/WEBPRDDT6</property>
+		<property name="dialect">org.hibernate.dialect.DB2400Dialect</property>
+		<property name="connection.driver_class">com.ibm.as400.access.AS400JDBCDriver</property>
+		-->
+		<!-- MySQL --> 
+		<property name="connection.username">root</property>
+		<property name="connection.password"></property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/fipsen</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>				
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		
+		
+
+		<property name="connection.transaction isolation">none</property>
+		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+		<property name="current_session_context_class">thread</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="jdbc.pool.connection.maxActive">3</property>
+		<property name="jdbc.pool.connection.maxIdle">1</property>
+		<!--  <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+			-->
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.timeout">1800</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.acquireRetryAttempts">5</property>
+		<property name="hibernate.c3p0.acquireRetryDelay">1000</property>
+
+		<mapping resource="com/fipsen/core/entity/hbm/Image.hbm.xml"/>
+		<mapping resource="com/fipsen/core/entity/hbm/News.hbm.xml"/>
+		<mapping resource="com/fipsen/core/entity/hbm/LatestNews.hbm.xml"/>
+		<mapping resource="com/fipsen/core/entity/hbm/Video.hbm.xml"/>
+		<mapping resource="com/fipsen/core/entity/hbm/LatestVideo.hbm.xml"/>
+		<mapping resource="com/fipsen/core/entity/hbm/TopCelebrity.hbm.xml"/>
+
+
+	</session-factory>
+
+</hibernate-configuration>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<project name="fipsen.lib" default="all" basedir=".">
+	<property name="app.name" value="fipsen.lib"/>
+	<property name="bin.dir" value="build"/>
+	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="conf.dir" value="conf"/>
+
+	<property name="dist.dir" value="../Fipsen.Lib"/>
+
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="clean" description="Delete old bin and dist directories">
+		<delete dir="${bin.dir}"/>
+		<delete dir="${dist.dir}">
+		</delete>
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}/${lib.dir}"/>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<copy todir="${bin.dir}/com/fipsen/core/entity/hbm/">
+			<fileset dir="${src.dir}/com/fipsen/core/entity/hbm/">
+				<include name="*.hbm.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${bin.dir}/">
+			<fileset dir="${src.dir}/">
+				<include name="*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="dist" depends="compile" description="Create binary distribution">
+		<jar jarfile="${dist.dir}/${lib.dir}/${app.name}.jar" basedir="${bin.dir}">
+			<fileset dir="${bin.dir}/com/fipsen/core/entity/hbm/" >
+				<include name="/test/*.hbm.xml"/>
+			</fileset>
+		</jar>
+		<copy todir="${dist.dir}/${lib.dir}">
+			<fileset dir="${lib.dir}">
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ==================== All Target ====================================== -->
+	<target name="all" depends="clean, init, compile, dist" description="Clean bin and dist directories, then compile"/>
+
+</project>
